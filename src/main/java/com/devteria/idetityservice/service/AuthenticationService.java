@@ -125,7 +125,7 @@ public class AuthenticationService {
 //        neu khong rong
         if (!CollectionUtils.isEmpty(user.getRoles()))
         {
-            user.getRoles().forEach(stringJoiner::add);
+//            user.getRoles().forEach(stringJoiner::add);
         }
     return  stringJoiner.toString();
     }
