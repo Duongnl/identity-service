@@ -24,7 +24,7 @@ public class User {
      String lastname;
      LocalDate dob;
 //     dam bao trong llist chi co 1, nhu khoa chinh
-//    @ManyToMany
-    Set<String> roles;
+    @ManyToMany
+    Set<Role> roles;
 
 }
