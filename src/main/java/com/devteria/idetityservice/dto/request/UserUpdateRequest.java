@@ -1,5 +1,6 @@
 package com.devteria.idetityservice.dto.request;
 
+import com.devteria.idetityservice.validator.DobConstraint;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,6 +19,8 @@ public class UserUpdateRequest {
 
     private String firstname;
     private String lastname;
+
+    @DobConstraint(min = 18, message = "INVALID_DOB")
     private LocalDate dob;
 
     List<String> roles;

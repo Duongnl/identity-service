@@ -1,5 +1,6 @@
 package com.devteria.idetityservice.dto.request;
 
+import com.devteria.idetityservice.validator.DobConstraint;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -23,6 +24,9 @@ public class UserCreationRequest {
     String password;
     String firstname;
     String lastname;
+
+//    mapp vao dob
+    @DobConstraint(min = 18, message = "INVALID_DOB")
     LocalDate dob;
 
 //    @NotBlank @NotEmpty @Email @NotNull co the custom
