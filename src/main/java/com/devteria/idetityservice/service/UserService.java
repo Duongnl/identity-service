@@ -8,6 +8,7 @@ import com.devteria.idetityservice.enums.Role;
 import com.devteria.idetityservice.exception.AppException;
 import com.devteria.idetityservice.exception.ErrorCode;
 import com.devteria.idetityservice.mapper.UserMapper;
+import com.devteria.idetityservice.repository.RoleRespository;
 import com.devteria.idetityservice.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class UserService {
      UserRepository userRepository;
      UserMapper userMapper;
      PasswordEncoder passwordEncoder;
+     RoleRespository roleRespository;
 
     public UserResponse createUser (UserCreationRequest request) {
         if(userRepository.existsByUsername(request.getUsername())){
@@ -58,7 +60,10 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
-    @PreAuthorize("hasRole('ADMIN')") // pre de vao duoc ham getusers phai co role admin moi duoc goi ham nay
+//    hash role thi spring tu mapp voi nhung cai co chu ROLE_ dang truoc
+//    @PreAuthorize("hasRole('ADMIN')") // pre de vao duoc ham getusers phai co role admin moi duoc goi ham nay
+//    cai nay la  mapp chinh xac nhung chu co trong scope
+    @PreAuthorize("hasAuthority('APPROVE_POST')")
     public List<User> getUsers(){
         log.info("In method get user");
         return userRepository.findAll();
@@ -75,6 +80,11 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(()-> new AppException(ErrorCode.USER_NOTFOUND));
 //        mapping request vao user
         userMapper.updateUser(user,request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        var roles = roleRespository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
+
        return userMapper.toUserResponse(  userRepository.save(user));
     }
 
